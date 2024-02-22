@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentHub</title>
+    <link rel="stylesheet" href="/css/studentHub.css">
+    <script src="/js/studentHub.js" defer></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.7.12/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+</head>
+<body>
+<div id="options">
+
+    <span id="update-select" class="box">
+        <h1>Update</h1>
+        <div>
+            <select name="update-id-select">
+                <option value="-1" selected>Choose a Student</option>
+                <th:block th:each="student : ${students}">
+                    <option th:value="${student.id}" th:text="${student.name}+' ('+${student.id}+')'">Student Name</option>
+                </th:block>
+            </select>
+            <button type="button" id="update-button" class="btn-warning">Update Student</button>
+        </div>
+    </span>
+
+    <span id="add-press" class="box">
+        <h1>Add</h1>
+        <button class="btn btn-primary" type="button" id="add-button" style="font-size: larger;">+</button>
+    </span>
+
+    <span id="delete" class="box">
+        <h1>Delete</h1>
+        <form action="/student/delete" method="post">
+            <select name="delete-id">
+                <option value="-1" selected>Choose a Student</option>
+                <th:block th:each="student : ${students}">
+                    <option th:value="${student.id}" th:text="${student.name}+' ('+${student.id}+')'">Student Name</option>
+                </th:block>
+            </select>
+            <button type="submit" class="btn-danger">Delete Student</button>
+        </form>
+    </span>
+
+    <div id="add-form" style="display: none;">
+        <form action="/student/add" method="post" class="form">
+            <span class="box">Name<input type="text" id="add-name" name="name" required></span>
+            <span class="box">Height<input type="number" id="add-height" name="height" required min="20" max="300"></span>
+            <span class="box">Weight<input type="number" id="add-weight" name="weight" required min="20" max="300"></span>
+            <span class="box">GPA<input type="number" id="add-gpa" name="gpa" required step="0.01" min="0" max="4.33"></span>
+            <span class="box">Hair Colour<select id="add-hairColor" name="hairColor">
+                <option value="brown">Brown</option>
+                <option value="blonde">Blonde</option>
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+                <option value="other">Other</option>
+            </select></span>
+            <span class="box">Favourite Shape<select id="add-shape" name="shape">
+                <option value="circle">Circle</option>
+                <option value="square">Square</option>
+            </select></span>
+            <button type="submit" class="btn-success form-button">Add Student</button>
+            <button type="button" class="btn-danger form-button" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+
+    <div id="update-form" style="display: none;">
+        <form action="/student/update" method="post" class="form">
+            <input type="hidden" id="update-id" name="update-id-form" value="">
+            <span class="box">Name<input type="text" id="update-name" name="name" required></span>
+            <span class="box">Height<input type="number" id="update-height" name="height" required min="20" max="300"></span>
+            <span class="box">Weight<input type="number" id="update-weight" name="weight" required min="20" max="300"></span>
+            <span class="box">GPA<input type="number" id="update-gpa" name="gpa" required step="0.01" min="0" max="4.33"></span>
+            <span class="box">Hair Colour<select id="update-hairColor" name="hairColor">
+                <option value="brown">Brown</option>
+                <option value="blonde">Blonde</option>
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+                <option value="other">Other</option>
+            </select></span>
+            <span class="box">Favourite Shape<select id="update-shape" name="shape">
+                <option value="circle">Circle</option>
+                <option value="square">Square</option>
+            </select></span>
+            <button type="submit" class="btn-success form-button">Update Student</button>
+            <button type="button" class="btn-danger form-button" onclick="hideForm()">Cancel</button>
+        </form>
+    </div>
+
+    
+</div>
+
+    <div class="show">
+        <div class="container mt-4">
+            <div class="row custom-border">
+                <div th:each="student : ${students}" class="col-md-2 mb-3 d-flex justify-content-center align-self-end">
+                    <div class="card student" 
+                         th:classappend="${student.shape}"
+                         th:style="'border-width:' + ${student.gpa+0.5} + 'px; height:' + ${3+student.height/30} + 'em; width:' + ${3+student.weight/40} + 'em;'"
+                         th:onClick="'showUpdate(' + ${student.id} + ')'"
+                    >
+                        <div class="card-body">
+                            <p class="card-text cardID" th:text="${student.id}"></p>
+                            <h5 class="card-title" th:classappend="${student.hairColor}" th:text="${student.name}"></h5>
+                            <p class="card-text" th:text="${student.gpa}" style="color: rgb(30, 182, 182);"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+</body>
+</html>
